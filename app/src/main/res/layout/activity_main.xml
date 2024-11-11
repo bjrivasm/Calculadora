@@ -5,6 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#2e2e2e"
+    android:textAlignment="viewEnd"
     tools:context=".MainActivity">
 
     <Button
@@ -260,8 +262,11 @@
         android:layout_width="365dp"
         android:layout_height="220dp"
         android:layout_marginEnd="24dp"
+        android:background="#4B4B4B"
+        android:padding="10dp"
         android:text="0"
         android:textAlignment="textEnd"
+        android:textColor="#FFFFFF"
         android:textSize="60sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
