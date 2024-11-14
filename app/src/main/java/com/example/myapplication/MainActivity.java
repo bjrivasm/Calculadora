@@ -18,6 +18,11 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private List<String> operaciones = List.of("+","-","*","/","%");
+    private Double valorAnterior;
+    private String operador = null;
+    private Boolean entradaNueva = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,62 +34,78 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return insets;
         });
 
+        //Numeros
         Button bt0 = (Button) findViewById(R.id.bt0);
         bt0.setOnClickListener(this);
-
         Button bt1 = (Button) findViewById(R.id.bt1);
         bt1.setOnClickListener(this);
-
         Button bt2 = (Button) findViewById(R.id.bt2);
         bt2.setOnClickListener(this);
-
         Button bt3 = (Button) findViewById(R.id.bt3);
         bt3.setOnClickListener(this);
-
         Button bt4 = (Button) findViewById(R.id.bt4);
         bt4.setOnClickListener(this);
-
         Button bt5 = (Button) findViewById(R.id.bt5);
         bt5.setOnClickListener(this);
-
         Button bt6 = (Button) findViewById(R.id.bt6);
         bt6.setOnClickListener(this);
-
         Button bt7 = (Button) findViewById(R.id.bt7);
         bt7.setOnClickListener(this);
-
         Button bt8 = (Button) findViewById(R.id.bt8);
         bt8.setOnClickListener(this);
-
         Button bt9 = (Button) findViewById(R.id.bt9);
         bt9.setOnClickListener(this);
 
+        //Operaciones
+        Button btSuma = (Button) findViewById(R.id.btSuma);
+        btSuma.setOnClickListener(this);
+        Button btResta = (Button) findViewById(R.id.btResta);
+        btResta.setOnClickListener(this);
+        Button btMultiplicar = (Button) findViewById(R.id.btMultiplicar);
+        btMultiplicar.setOnClickListener(this);
+        Button btDividir = (Button) findViewById(R.id.btDividir);
+        btDividir.setOnClickListener(this);
+        Button btPorcentaje = (Button) findViewById(R.id.btPorcentaje);
+        btPorcentaje.setOnClickListener(this);
+
+        //Botones de control
+        Button btCe = (Button) findViewById(R.id.btCE);
+        btCe.setOnClickListener(this);
+        Button btC = (Button) findViewById(R.id.btC);
+        btC.setOnClickListener(this);
+        Button btnMasMenos = (Button) findViewById(R.id.btMasMenos);
+        btnMasMenos.setOnClickListener(this);
+        Button btComa = (Button) findViewById(R.id.btComa);
+        btComa.setOnClickListener(this);
+        Button btIgual = (Button) findViewById(R.id.btIgual);
+        btIgual.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view){
         Button boton = (Button) view;
-        String valor = boton.getText().toString();
-        List<String> operaciones = new ArrayList<>();
-        operaciones.add("+");
-        operaciones.add("-");
-        operaciones.add("*");
-        operaciones.add("/");
-        operaciones.add("%");
-        //if(boton.getId() = (Button) findViewById(R.id.bt1).getId())
-        if (isNumber(valor)) {
-            TextView res = (TextView) findViewById(R.id.tvResultado);
-            valor = res.getText().toString() + valor;
-            res.setText(valor);
-        } else if(operaciones.contains(valor)){
-            TextView res = (TextView) findViewById(R.id.tvResultado);
-            String valres = res.getText().toString();
+        String valorActual = boton.getText().toString();
+
+        TextView tvPantalla = (TextView) findViewById(R.id.tvResultado);
+
+        if(entradaNueva || tvPantalla.getText().toString().equals("0")) {
+            tvPantalla.setText(valorActual);
+            entradaNueva = false;
+        } else if (isNumber(valorActual)) {
+            valorActual = tvPantalla.getText().toString() + valorActual;
+            tvPantalla.setText(valorActual);
+        } else if (operaciones.contains(valorActual)) {
+            String valres = tvPantalla.getText().toString();
             if(isNumber(Character.toString(valres.charAt(valres.length()-1)))) {
-                valor = valres + valor;
+                valorAnterior = Double.valueOf(valres + valorActual);
+                operador = valorActual;
             } else {
-                valor = valres.substring(0, valres.length()-2) + valor;
+                valorAnterior = Double.valueOf(valres.substring(0, valres.length()-2) + valorActual);
+                operador = valorActual;
             }
+            entradaNueva = true;
         }
+
     }
 
     public boolean isNumber(String num){
