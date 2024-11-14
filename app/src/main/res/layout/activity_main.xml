@@ -10,6 +10,19 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/btRaiz"
+        android:layout_width="64dp"
+        android:layout_height="68dp"
+        android:layout_marginEnd="100dp"
+        android:backgroundTint="#9C27B0"
+        android:text="√"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.497" />
+
+    <Button
         android:id="@+id/btC"
         android:layout_width="64dp"
         android:layout_height="68dp"
@@ -32,7 +45,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.613" />
+        app:layout_constraintVertical_bias="0.856" />
 
     <Button
         android:id="@+id/btPorcentaje"
@@ -48,12 +61,12 @@
         app:layout_constraintVertical_bias="0.497" />
 
     <Button
-        android:id="@+id/btCE"
+        android:id="@+id/btAC"
         android:layout_width="64dp"
         android:layout_height="68dp"
         android:layout_marginEnd="328dp"
         android:backgroundTint="#9C27B0"
-        android:text="CE"
+        android:text="AC"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -70,7 +83,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.612" />
+        app:layout_constraintVertical_bias="0.856" />
 
     <Button
         android:id="@+id/bt3"
@@ -82,7 +95,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.612" />
+        app:layout_constraintVertical_bias="0.856" />
 
     <Button
         android:id="@+id/bt6"
@@ -197,7 +210,7 @@
 
     <Button
         android:id="@+id/btMultiplicar"
-        android:layout_width="144dp"
+        android:layout_width="64dp"
         android:layout_height="68dp"
         android:layout_marginEnd="20dp"
         android:backgroundTint="#9C27B0"
@@ -210,16 +223,30 @@
 
     <Button
         android:id="@+id/btDividir"
-        android:layout_width="144dp"
+        android:layout_width="64dp"
         android:layout_height="68dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="100dp"
         android:backgroundTint="#9C27B0"
         android:text="/"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+        app:layout_constraintVertical_bias="0.612" />
+
+    <Button
+        android:id="@+id/btBorrar"
+        android:layout_width="64dp"
+        android:layout_height="68dp"
+        android:layout_marginEnd="20dp"
+        android:backgroundTint="#9C27B0"
+        android:maxLines="1"
+        android:text="D"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.497" />
 
     <Button
         android:id="@+id/bt7"
@@ -231,7 +258,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.855" />
+        app:layout_constraintVertical_bias="0.612" />
 
     <Button
         android:id="@+id/bt8"
@@ -243,7 +270,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.856" />
+        app:layout_constraintVertical_bias="0.612" />
 
     <Button
         android:id="@+id/bt9"
@@ -255,13 +282,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.855" />
+        app:layout_constraintVertical_bias="0.612" />
 
     <TextView
         android:id="@+id/tvResultado"
-        android:layout_width="365dp"
+        android:layout_width="372dp"
         android:layout_height="220dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="20dp"
         android:background="#4B4B4B"
         android:padding="10dp"
         android:textAlignment="textEnd"
@@ -270,6 +297,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.181" />
+        app:layout_constraintVertical_bias="0.16" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

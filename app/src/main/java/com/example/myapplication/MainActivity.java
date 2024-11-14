@@ -11,18 +11,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private List<String> operaciones = List.of("+","-","*","/","%");
     private Double valorAnterior;
     private String operador = null;
     private Boolean entradaNueva = true;
-    private final TextView tvPantalla = (TextView) findViewById(R.id.tvResultado);
+    private TextView tvPantalla;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +30,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        tvPantalla = findViewById(R.id.tvResultado);
+        tvPantalla.setText("0");
 
         //Numeros
         Button bt0 = (Button) findViewById(R.id.bt0);
@@ -70,8 +69,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btPorcentaje.setOnClickListener(this);
 
         //Botones de control
-        Button btCe = (Button) findViewById(R.id.btCE);
-        btCe.setOnClickListener(this);
+        Button btAc = (Button) findViewById(R.id.btAC);
+        btAc.setOnClickListener(this);
         Button btC = (Button) findViewById(R.id.btC);
         btC.setOnClickListener(this);
         Button btnMasMenos = (Button) findViewById(R.id.btMasMenos);
@@ -80,6 +79,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btComa.setOnClickListener(this);
         Button btIgual = (Button) findViewById(R.id.btIgual);
         btIgual.setOnClickListener(this);
+        Button btBorrar = (Button) findViewById(R.id.btBorrar);
+        btBorrar.setOnClickListener(this);
+        Button btRaiz = (Button) findViewById(R.id.btRaiz);
+        btRaiz.setOnClickListener(this);
     }
 
     @Override
@@ -87,49 +90,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button boton = (Button) view;
         String valorActual = boton.getText().toString();
 
-        if (entradaNueva || tvPantalla.getText().toString().equals("0")) {
-            tvPantalla.setText(valorActual);
-            entradaNueva = false;
-        } else if (isNumber(valorActual)) {
-            valorActual = tvPantalla.getText().toString() + valorActual;
-            tvPantalla.setText(valorActual);
-        } else if (operaciones.contains(valorActual)) {
-            String valres = tvPantalla.getText().toString();
-            if (isNumber(Character.toString(valres.charAt(valres.length() - 1)))) {
-                valorAnterior = Double.valueOf(valres);
-                operador = valorActual;
+        // Primero verificamos si el valor es un número
+        if (isNumber(valorActual)) {
+            // Si es un número, procedemos con la lógica correspondiente
+            if (entradaNueva || tvPantalla.getText().toString().equals("0")) {
+                tvPantalla.setText(valorActual);
+                entradaNueva = false;
             } else {
-                valorAnterior = Double.valueOf(valres.substring(0, valres.length() - 2));
-                operador = valorActual;
+                tvPantalla.append(valorActual);
             }
-            entradaNueva = true;
         } else {
             switch (valorActual) {
-                case "=":
-                    double resultado = calcularOperacion(Double.parseDouble(tvPantalla.getText().toString()));
-                    tvPantalla.setText(String.valueOf(resultado));
-                    entradaNueva = true;
+                case "+":
+                case "-":
+                case "x":
+                case "/":
+                case "%":
+                    procesarOperador(valorActual);
                     break;
-
+                case "=":
+                    calcularResultado();
+                    break;
                 case "+/-":
                     double valor = Double.parseDouble(tvPantalla.getText().toString()) * -1;
                     tvPantalla.setText(String.valueOf(valor));
                     break;
-
                 case "C":
                     limpiarValorActual();
                     break;
-
-                case "CE":
+                case "AC":
                     limpiarCalculadora();
                     break;
-
                 case ",":
                     if (!tvPantalla.getText().toString().contains(".")) {
                         tvPantalla.append(".");
                     }
                     break;
-
+                case "D":
+                    if (!entradaNueva) {
+                        borrarUltimoCaracter();
+                    }
+                    break;
+                case "√":
+                    calcularRaizCuadrada();
+                    break;
                 default:
                     break;
             }
@@ -137,76 +141,101 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    private void procesarOperador(String valorActual) {
+        String valorPantalla = tvPantalla.getText().toString();
+        if (isNumber(Character.toString(valorPantalla.charAt(valorPantalla.length() - 1)))) {
+            valorAnterior = Double.valueOf(valorPantalla);
+            operador = valorActual;
+            entradaNueva = true;
+        } else {
+            operador = valorActual;
+        }
+    }
+
+    private void calcularResultado() {
+        if (operador != null) {
+            try {
+                double valorActual = Double.parseDouble(tvPantalla.getText().toString());
+                double resultado = calcularOperacion(valorActual);
+                tvPantalla.setText(String.valueOf(resultado));
+                operador = null;
+                valorAnterior = resultado;
+                entradaNueva = true;
+            } catch (NumberFormatException e) {
+                tvPantalla.setText("Error");
+            }
+        }
+    }
+
+    private double calcularOperacion(Double valorActual) {
+        double resultado = 0;
+        if (valorAnterior != null) {
+            switch (operador) {
+                case "+":
+                    resultado = valorAnterior + valorActual;
+                    break;
+                case "-":
+                    resultado = valorAnterior - valorActual;
+                    break;
+                case "x":
+                    resultado = valorAnterior * valorActual;
+                    break;
+                case "/":
+                    if (valorActual != 0) {
+                        resultado = valorAnterior / valorActual;
+                    } else {
+                        tvPantalla.setText("Error");
+                    }
+                    break;
+            }
+        }
+        return resultado;
+    }
+
+    private boolean isNumber(String num) {
+        try {
+            Integer.parseInt(num);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private void calcularRaizCuadrada() {
+        try {
+            double valorActual = Double.parseDouble(tvPantalla.getText().toString());
+            if (valorActual >= 0) {
+                double resultado = Math.sqrt(valorActual);
+                tvPantalla.setText(String.valueOf(resultado));
+                entradaNueva = true;
+            } else {
+                tvPantalla.setText("Error");
+            }
+        } catch (NumberFormatException e) {
+            tvPantalla.setText("Error");
+        }
+    }
+
+
+    private void borrarUltimoCaracter() {
+        String pantallaTexto = tvPantalla.getText().toString();
+        if (pantallaTexto.length() > 1) {
+            tvPantalla.setText(pantallaTexto.substring(0, pantallaTexto.length() - 1));
+        } else {
+            tvPantalla.setText("0");
+            entradaNueva = true;
+        }
+    }
+
     private void limpiarValorActual() {
         tvPantalla.setText("0");
         entradaNueva = true;
     }
 
-
-    /*public void onClick(View view){
-        Button boton = (Button) view;
-        String valorActual = boton.getText().toString();
-
-        if(entradaNueva || tvPantalla.getText().toString().equals("0")) {
-            tvPantalla.setText(valorActual);
-            entradaNueva = false;
-        } else if (isNumber(valorActual)) {
-            valorActual = tvPantalla.getText().toString() + valorActual;
-            tvPantalla.setText(valorActual);
-        } else if (operaciones.contains(valorActual)) {
-            String valres = tvPantalla.getText().toString();
-            if(isNumber(Character.toString(valres.charAt(valres.length()-1)))) {
-                valorAnterior = Double.valueOf(valres + valorActual);
-                operador = valorActual;
-            } else {
-                valorAnterior = Double.valueOf(valres.substring(0, valres.length()-2) + valorActual);
-                operador = valorActual;
-            }
-            entradaNueva = true;
-        } else if (valorActual.equals("=")) {
-            calcularOperacion(Double.parseDouble(valorActual));
-        }
-
-    }*/
-
-    private double calcularOperacion(Double valorActual) {
-        double resultado = 0;
-
-        switch (operador) {
-            case "+":
-                resultado = valorAnterior + valorActual;
-                break;
-            case "-":
-                resultado = valorAnterior - valorActual;
-                break;
-            case "*":
-                resultado = valorAnterior * valorActual;
-                break;
-            case "/":
-                if (valorActual != 0) {
-                    resultado = valorAnterior / valorActual;
-                } else {
-                    tvPantalla.setText("Error");
-                }
-                break;
-        }
-
-        return resultado;
-    }
-
-    private boolean isNumber(String num){
-        try{
-            int valor = Integer.parseInt(num);
-            return true;
-        }catch (Exception e){
-            return false;
-        }
-    }
-
-    private void limpiarCalculadora(){
+    private void limpiarCalculadora() {
         tvPantalla.setText("0");
-        valorAnterior = 0.0;
-        operador = "";
+        valorAnterior = null;
+        operador = null;
         entradaNueva = true;
     }
 }
