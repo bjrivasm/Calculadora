@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Double valorAnterior;
     private String operador = null;
     private Boolean entradaNueva = true;
+    private final TextView tvPantalla = (TextView) findViewById(R.id.tvResultado);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +87,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button boton = (Button) view;
         String valorActual = boton.getText().toString();
 
-        TextView tvPantalla = (TextView) findViewById(R.id.tvResultado);
-
         if(entradaNueva || tvPantalla.getText().toString().equals("0")) {
             tvPantalla.setText(valorActual);
             entradaNueva = false;
@@ -104,16 +103,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 operador = valorActual;
             }
             entradaNueva = true;
+        } else if (valorActual.equals("=")) {
+            calcularOperacion(Double.parseDouble(valorActual));
         }
 
     }
 
-    public boolean isNumber(String num){
+    private double calcularOperacion(Double valorActual) {
+        double resultado = 0;
+
+        switch (operador) {
+            case "+":
+                resultado = valorAnterior + valorActual;
+                break;
+            case "-":
+                resultado = valorAnterior - valorActual;
+                break;
+            case "*":
+                resultado = valorAnterior * valorActual;
+                break;
+            case "/":
+                if (valorActual != 0) {
+                    resultado = valorAnterior / valorActual;
+                } else {
+                    tvPantalla.setText("Error");
+                }
+                break;
+        }
+
+        return resultado;
+    }
+
+    private boolean isNumber(String num){
         try{
             int valor = Integer.parseInt(num);
             return true;
         }catch (Exception e){
             return false;
         }
+    }
+
+    private void limpiarCalculadora(){
+        tvPantalla.setText("0");
+        valorAnterior = 0.0;
+        entradaNueva = true;
     }
 }
