@@ -83,7 +83,67 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View view){
+    public void onClick(View view) {
+        Button boton = (Button) view;
+        String valorActual = boton.getText().toString();
+
+        if (entradaNueva || tvPantalla.getText().toString().equals("0")) {
+            tvPantalla.setText(valorActual);
+            entradaNueva = false;
+        } else if (isNumber(valorActual)) {
+            valorActual = tvPantalla.getText().toString() + valorActual;
+            tvPantalla.setText(valorActual);
+        } else if (operaciones.contains(valorActual)) {
+            String valres = tvPantalla.getText().toString();
+            if (isNumber(Character.toString(valres.charAt(valres.length() - 1)))) {
+                valorAnterior = Double.valueOf(valres);
+                operador = valorActual;
+            } else {
+                valorAnterior = Double.valueOf(valres.substring(0, valres.length() - 2));
+                operador = valorActual;
+            }
+            entradaNueva = true;
+        } else {
+            switch (valorActual) {
+                case "=":
+                    double resultado = calcularOperacion(Double.parseDouble(tvPantalla.getText().toString()));
+                    tvPantalla.setText(String.valueOf(resultado));
+                    entradaNueva = true;
+                    break;
+
+                case "+/-":
+                    double valor = Double.parseDouble(tvPantalla.getText().toString()) * -1;
+                    tvPantalla.setText(String.valueOf(valor));
+                    break;
+
+                case "C":
+                    limpiarValorActual();
+                    break;
+
+                case "CE":
+                    limpiarCalculadora();
+                    break;
+
+                case ",":
+                    if (!tvPantalla.getText().toString().contains(".")) {
+                        tvPantalla.append(".");
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+
+    private void limpiarValorActual() {
+        tvPantalla.setText("0");
+        entradaNueva = true;
+    }
+
+
+    /*public void onClick(View view){
         Button boton = (Button) view;
         String valorActual = boton.getText().toString();
 
@@ -107,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             calcularOperacion(Double.parseDouble(valorActual));
         }
 
-    }
+    }*/
 
     private double calcularOperacion(Double valorActual) {
         double resultado = 0;
@@ -146,6 +206,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void limpiarCalculadora(){
         tvPantalla.setText("0");
         valorAnterior = 0.0;
+        operador = "";
         entradaNueva = true;
     }
 }
